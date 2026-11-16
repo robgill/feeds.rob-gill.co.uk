@@ -1,0 +1,144 @@
+.wrap {
+  max-width: calc(var(--unit) * 90);
+  padding: calc(var(--unit) * 4) calc(var(--unit) * 3) calc(var(--unit) * 8);
+}
+
+.mast-row,
+.feed-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: calc(var(--unit) * 2);
+}
+
+.kicker,
+.feed-head p,
+.item-meta,
+.note,
+.themes {
+  color: var(--grey-3);
+  font-size: var(--fs-small);
+}
+
+h1 {
+  margin-top: calc(var(--unit) * 3);
+  font-size: var(--fs-title);
+  font-weight: var(--w-bold);
+}
+
+h2 {
+  font-size: var(--fs-body);
+  font-weight: var(--w-bold);
+  color: var(--grey-1);
+}
+
+.lede {
+  max-width: 62ch;
+  margin-top: var(--unit);
+  color: var(--grey-2);
+}
+
+.themes {
+  display: flex;
+  gap: calc(var(--unit) * 1.5);
+}
+
+.themes button {
+  color: var(--grey-3);
+}
+
+html[data-theme="light"] [data-theme-choice="light"],
+html[data-theme="dark"] [data-theme-choice="dark"],
+html[data-theme="yellow"] [data-theme-choice="yellow"] {
+  color: var(--text);
+  box-shadow: inset 0 calc(var(--unit) / -4) 0 var(--accent);
+}
+
+a:hover {
+  background: linear-gradient(transparent 65%, var(--accent) 65%, var(--accent) 92%, transparent 92%);
+}
+
+.feed {
+  margin-top: calc(var(--unit) * 4);
+  padding-top: calc(var(--unit) * 3);
+  border-top: 1px solid var(--grey-5);
+}
+
+.quiet {
+  color: var(--grey-2);
+  font-size: var(--fs-small);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: calc(var(--unit) * 14) minmax(0, 1fr);
+  column-gap: calc(var(--unit) * 2);
+  margin-top: calc(var(--unit) * 2);
+}
+
+.meta > div {
+  display: contents;
+}
+
+.meta dt {
+  color: var(--grey-4);
+  font-size: var(--fs-small);
+}
+
+.meta dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.more,
+.back {
+  display: inline-block;
+  margin-top: calc(var(--unit) * 2);
+}
+
+.items {
+  margin-top: calc(var(--unit) * 2);
+}
+
+.items li {
+  margin-top: calc(var(--unit) * 3);
+}
+
+.items a {
+  color: var(--grey-1);
+}
+
+.item-meta {
+  display: block;
+  color: var(--grey-4);
+}
+
+.note {
+  margin-top: calc(var(--unit) * 6);
+}
+
+.run-error {
+  display: block;
+  color: var(--grey-2);
+  font-size: var(--fs-small);
+}
+
+code {
+  font: inherit;
+  background: var(--grey-5);
+  padding: 0 calc(var(--unit) / 2);
+}
+
+@media (max-width: 799px) {
+  .mast-row,
+  .feed-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .meta {
+    grid-template-columns: 1fr;
+  }
+}
