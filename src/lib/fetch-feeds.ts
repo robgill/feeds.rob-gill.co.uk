@@ -4,7 +4,7 @@ import { feeds, items, runs, type RunCounts } from "@/db/schema";
 import { dedupeHash } from "./dedupe";
 import { parseFeed, type ParsedItem } from "./parse-feed";
 
-const MAX_FEED_CHARS = 2_000_000;
+const MAX_FEED_CHARS = 10_000_000;
 const USER_AGENT = "feeds.rob-gill.co.uk/0.1 (+https://feeds.rob-gill.co.uk)";
 
 export type FeedFetchResult = {
@@ -123,11 +123,11 @@ async function readFeed(url: string, options: FetchFeedsOptions): Promise<string
 
   const advertised = Number(response.headers.get("content-length") ?? "0");
   if (Number.isFinite(advertised) && advertised > MAX_FEED_CHARS) {
-    throw new Error("Feed is larger than 2 MB.");
+    throw new Error("Feed is larger than 10 MB.");
   }
 
   const text = await response.text();
-  if (text.length > MAX_FEED_CHARS) throw new Error("Feed is larger than 2 MB.");
+  if (text.length > MAX_FEED_CHARS) throw new Error("Feed is larger than 10 MB.");
   return text;
 }
 

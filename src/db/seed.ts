@@ -37,6 +37,22 @@ export const SEEDED_FEEDS = [
     via: "glastonburyfestivals.co.uk",
     createdAt: new Date("2026-01-01T00:00:01.000Z"),
   },
+  {
+    name: "Lenny's Podcast",
+    url: "https://api.substack.com/feed/podcast/10845.rss",
+    destinationName: "#feeds",
+    mark: ":lennys:",
+    via: "lennysnewsletter.com",
+    createdAt: new Date("2026-01-01T00:00:02.000Z"),
+  },
+  {
+    name: "How I AI",
+    url: "https://api.substack.com/feed/podcast/10845/s/198869.rss",
+    destinationName: "#feeds",
+    mark: ":howiai:",
+    via: "lennysnewsletter.com",
+    createdAt: new Date("2026-01-01T00:00:03.000Z"),
+  },
 ] as const;
 
 const SCHEDULE = {
