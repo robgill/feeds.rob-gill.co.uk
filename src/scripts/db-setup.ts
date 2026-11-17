@@ -1,7 +1,8 @@
 import { asc, eq } from "drizzle-orm";
 import { closeDb, databaseDriver, databaseLabel, getDb } from "@/db/client";
 import { migrateDatabase } from "@/db/migrate";
-import { seed } from "@/db/seed";
+import { feedsConfig } from "../../feeds.config";
+import { resolveOwner, seed } from "@/db/seed";
 import { destinations, feeds, routes } from "@/db/schema";
 import { scheduleLabel } from "@/lib/format";
 import { loadEnvFiles } from "./load-env";
@@ -28,8 +29,9 @@ async function main(): Promise<void> {
       .leftJoin(destinations, eq(destinations.id, routes.destinationId))
       .orderBy(asc(feeds.createdAt), asc(destinations.name));
 
+    const owner = resolveOwner(feedsConfig);
     console.log(`Database ready (${databaseLabel()}).`);
-    console.log("Owner: Rob Gill <rob@provius.co.uk>");
+    console.log(`Owner: ${owner.name} <${owner.email}>`);
     for (const row of rows) {
       const target = row.destination ?? "no destination";
       console.log(`${row.name} → ${target} (${scheduleLabel(row.cadence, row.time, row.timezone)})`);

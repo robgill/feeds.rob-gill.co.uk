@@ -1,0 +1,128 @@
+/* Plain theme for forks. Every rule is under html[data-brand="plain"],
+   so a robgill build, which does not set that attribute, is unchanged. */
+
+html[data-brand="plain"] {
+  color-scheme: light;
+  --bg: #f7f6f3;
+  --text: #1c1917;
+  --grey-1: #292524;
+  --grey-2: #57534e;
+  --grey-3: #78716c;
+  --grey-4: #78716c;
+  --grey-5: #e7e5e4;
+  --accent: #1c1917;
+  --rule-colour: color-mix(in srgb, var(--text) 14%, transparent);
+  --rule-weight: 1px;
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --w-light: 400;
+  --w-regular: 400;
+  --w-bold: 650;
+  --fs-body: 16px;
+  --fs-small: 13px;
+  --fs-title: 22px;
+  --lh: 1.5;
+  --caps-tracking: 0.01em;
+  --unit: 8px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+html[data-brand="plain"][data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #141413;
+  --text: #f5f5f4;
+  --grey-1: #e7e5e4;
+  --grey-2: #a8a29e;
+  --grey-3: #a8a29e;
+  --grey-4: #78716c;
+  --grey-5: #292524;
+  --accent: #f5f5f4;
+  --rule-colour: color-mix(in srgb, var(--text) 16%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-brand="plain"]:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #141413;
+    --text: #f5f5f4;
+    --grey-1: #e7e5e4;
+    --grey-2: #a8a29e;
+    --grey-3: #a8a29e;
+    --grey-4: #78716c;
+    --grey-5: #292524;
+    --accent: #f5f5f4;
+    --rule-colour: color-mix(in srgb, var(--text) 16%, transparent);
+  }
+}
+
+html[data-brand="plain"],
+html[data-brand="plain"] *,
+html[data-brand="plain"] *::before,
+html[data-brand="plain"] *::after {
+  box-sizing: border-box;
+}
+
+html[data-brand="plain"] body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-weight: var(--w-regular);
+  font-size: var(--fs-body);
+  line-height: var(--lh);
+  -webkit-font-smoothing: antialiased;
+}
+
+html[data-brand="plain"] h1,
+html[data-brand="plain"] h2,
+html[data-brand="plain"] h3,
+html[data-brand="plain"] p,
+html[data-brand="plain"] ol,
+html[data-brand="plain"] ul {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+html[data-brand="plain"] ol,
+html[data-brand="plain"] ul {
+  list-style: none;
+}
+
+html[data-brand="plain"] button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+html[data-brand="plain"] a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+html[data-brand="plain"] a:hover {
+  text-decoration: underline;
+}
+
+html[data-brand="plain"] :focus {
+  outline: none;
+}
+
+html[data-brand="plain"] :focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 3px;
+}
+
+html[data-brand="plain"] ::selection {
+  background: var(--text);
+  color: var(--bg);
+}
+
+html[data-brand="plain"] .name {
+  margin-top: 0;
+}
