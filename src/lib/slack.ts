@@ -51,9 +51,7 @@ export function itemsToPost(rows: Item[], firstRun: boolean, now: Date): Item[] 
   if (!firstRun) return oldestFirst;
   const cutoff = now.getTime() - DAY_MS;
   const recent = oldestFirst.filter((row) => row.published && new Date(row.published).getTime() >= cutoff);
-  if (recent.length > 0) return recent;
-  const newest = [...unsent].sort((a, b) => time(b.published) - time(a.published))[0];
-  return newest ? [newest] : [];
+  return recent;
 }
 
 export type SlackPostResult = {
@@ -109,7 +107,16 @@ async function postOne(db: Database, feedId: string, now: Date): Promise<SlackPo
 
   const stored = await db.select().from(items).where(eq(items.feedId, feedId));
   const already = stored.some((row) => row.slackPostedAt);
-  const queue = itemsToPost(stored, !already, now);
+  const firstRun = !already;
+  const queue = itemsToPost(stored, firstRun, now);
+  if (firstRun) {
+    // Everything older than a day becomes the baseline: marked as handled so it never posts later.
+    const queued = new Set(queue.map((item) => item.id));
+    for (const row of stored) {
+      if (row.slackPostedAt || queued.has(row.id)) continue;
+      await db.update(items).set({ slackPostedAt: now }).where(eq(items.id, row.id));
+    }
+  }
   let posted = 0;
   for (const item of queue) {
     if (!item.link) continue;
