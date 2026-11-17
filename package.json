@@ -1,0 +1,43 @@
+{
+  "name": "feeds.rob-gill.co.uk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal RSS router for feeds.rob-gill.co.uk",
+  "homepage": "https://feeds.rob-gill.co.uk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robgill/feeds.rob-gill.co.uk.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "node --import tsx --test test/*.test.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:setup": "node --import tsx src/scripts/db-setup.ts",
+    "fetch": "node --import tsx src/scripts/fetch.ts"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "0.5.16",
+    "@neondatabase/serverless": "1.2.1",
+    "drizzle-orm": "0.45.4",
+    "fast-xml-parser": "5.12.1",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "drizzle-kit": "0.31.11",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "16.4.6",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}
