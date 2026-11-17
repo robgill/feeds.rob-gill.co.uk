@@ -53,6 +53,14 @@ export const SEEDED_FEEDS = [
     via: "lennysnewsletter.com",
     createdAt: new Date("2026-01-01T00:00:03.000Z"),
   },
+  {
+    name: "Design Details",
+    url: "https://feeds.simplecast.com/eew_vyNL",
+    destinationName: "#feeds",
+    mark: ":designdetails:",
+    via: "designdetails.fm",
+    createdAt: new Date("2026-01-01T00:00:04.000Z"),
+  },
 ] as const;
 
 const SCHEDULE = {
