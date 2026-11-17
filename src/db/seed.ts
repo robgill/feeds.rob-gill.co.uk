@@ -25,12 +25,16 @@ export const SEEDED_FEEDS = [
     name: "Sidebar",
     url: "https://sidebar.io/feed.xml",
     destinationName: "#feeds",
+    mark: ":sidebar:",
+    via: "sidebar.io",
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
   },
   {
     name: "Glastonbury Festival news",
     url: "https://www.glastonburyfestivals.co.uk/feed/",
     destinationName: "Personal email",
+    mark: null,
+    via: "glastonburyfestivals.co.uk",
     createdAt: new Date("2026-01-01T00:00:01.000Z"),
   },
 ] as const;
@@ -109,11 +113,15 @@ export async function seed(db: Database): Promise<void> {
         name: feed.name,
         url: feed.url,
         enabled: true,
+        mark: feed.mark,
+        via: feed.via,
         createdAt: feed.createdAt,
         ...SCHEDULE,
       })
       .onConflictDoNothing({ target: feeds.url })
       .returning();
+
+    await db.update(feeds).set({ mark: feed.mark, via: feed.via }).where(eq(feeds.url, feed.url));
 
     const stored =
       inserted[0] ?? (await db.select().from(feeds).where(eq(feeds.url, feed.url)))[0];

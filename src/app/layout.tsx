@@ -25,15 +25,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="https://rob-gill.co.uk/brand.css" />
       </head>
       <body>
-        <div className="wrap">
-          <header className="mast">
-            <HeadMark />
-            <h1 className="name">
-              feeds
-              <ThemeCaret />
-            </h1>
-          </header>
-          {children}
+        <div className="page">
+          <HeadMark />
+          <h1 className="name">
+            Feeds
+            <ThemeCaret />
+          </h1>
+          <div className="col">{children}</div>
         </div>
       </body>
     </html>

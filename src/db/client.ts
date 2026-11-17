@@ -28,7 +28,7 @@ function slot(): DatabaseSlot {
 }
 
 export function databaseUrl(): string | undefined {
-  const url = process.env.DATABASE_URL?.trim();
+  const url = process.env.DATABASE_URL?.trim() || process.env.POSTGRES_URL?.trim();
   return url ? url : undefined;
 }
 

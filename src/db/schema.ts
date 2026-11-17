@@ -62,6 +62,10 @@ export const feeds = pgTable(
     scheduleCadence: text("schedule_cadence").notNull().default("daily"),
     scheduleTime: text("schedule_time").notNull(),
     scheduleTimezone: text("schedule_timezone").notNull(),
+    /** Slack emoji shortcode, for example `:sidebar:`. */
+    mark: text("mark"),
+    /** Host shown as “via”, for example `sidebar.io`. */
+    via: text("via"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [
@@ -129,8 +133,10 @@ export const items = pgTable(
     dedupeHash: text("dedupe_hash").notNull(),
     title: text("title").notNull(),
     link: text("link"),
+    description: text("description"),
     published: timestamp("published", { withTimezone: true }),
     seenAt: timestamp("seen_at", { withTimezone: true }).notNull().defaultNow(),
+    slackPostedAt: timestamp("slack_posted_at", { withTimezone: true }),
   },
   (table) => [
     uniqueIndex("items_feed_dedupe_unique").on(table.feedId, table.dedupeHash),

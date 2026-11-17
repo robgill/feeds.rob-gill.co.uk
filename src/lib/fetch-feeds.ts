@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray, sql } from "drizzle-orm";
 import type { Database } from "@/db/client";
 import { feeds, items, runs, type RunCounts } from "@/db/schema";
 import { dedupeHash } from "./dedupe";
@@ -23,6 +23,8 @@ export type FetchFeedsOptions = {
   fetchImpl?: typeof fetch;
   now?: () => Date;
   timeoutMs?: number;
+  /** When set, only these feeds are fetched. An empty list fetches nothing. */
+  feedIds?: string[];
 };
 
 const emptyCounts = (): RunCounts => ({
@@ -33,9 +35,18 @@ const emptyCounts = (): RunCounts => ({
 });
 
 export async function fetchFeeds(db: Database, options: FetchFeedsOptions = {}): Promise<FetchFeedsResult> {
-  const enabled = await db.select().from(feeds).where(eq(feeds.enabled, true)).orderBy(feeds.createdAt);
+  const enabled = await db
+    .select()
+    .from(feeds)
+    .where(
+      options.feedIds
+        ? inArray(feeds.id, options.feedIds.length ? options.feedIds : ["00000000-0000-0000-0000-000000000000"])
+        : eq(feeds.enabled, true),
+    )
+    .orderBy(feeds.createdAt);
+  const chosen = enabled.filter((feed) => feed.enabled);
   const results: FeedFetchResult[] = [];
-  for (const feed of enabled) {
+  for (const feed of chosen) {
     results.push(await fetchOne(db, feed, options));
   }
   return { feeds: results };
@@ -142,18 +153,31 @@ async function storeNewItems(db: Database, feedId: string, parsed: ParsedItem[])
       dedupeHash: hash,
       title: item.title,
       link: item.link,
+      description: item.description,
       published: item.published,
     });
   }
 
   let inserted = 0;
   if (values.length > 0) {
-    const rows = await db
+    const known = new Set(
+      (
+        await db
+          .select({ dedupeHash: items.dedupeHash })
+          .from(items)
+          .where(eq(items.feedId, feedId))
+      ).map((row) => row.dedupeHash),
+    );
+    await db
       .insert(items)
       .values(values)
-      .onConflictDoNothing({ target: [items.feedId, items.dedupeHash] })
-      .returning({ id: items.id });
-    inserted = rows.length;
+      .onConflictDoUpdate({
+        target: [items.feedId, items.dedupeHash],
+        set: {
+          description: sql`coalesce(excluded.description, ${items.description})`,
+        },
+      });
+    inserted = values.filter((value) => !known.has(value.dedupeHash)).length;
     duplicates += values.length - inserted;
   }
 

@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MetaList } from "@/components/meta-list";
 import { SetupMessage } from "@/components/setup-message";
-import { formatWhen, hostLabel, statusLabel } from "@/lib/format";
+import { ItemList } from "@/components/item-list";
+import { formatWhen, statusLabel } from "@/lib/format";
 import { getFeedDetail } from "@/lib/status";
 
 type PageProps = {
@@ -56,19 +57,15 @@ export default async function FeedPage({ params }: PageProps) {
           { term: "New items", detail: lastRun ? String(lastRun.inserted) : "Not yet" },
         ]}
       />
-      {feed.items.length === 0 ? <p className="lede">No items yet.</p> : null}
-      <ol className="items">
-        {feed.items.map((item) => {
-          const host = hostLabel(item.link);
-          const when = item.published ? formatWhen(item.published) : `Seen ${formatWhen(item.seenAt)}`;
-          return (
-            <li key={item.id}>
-              {item.link ? <a href={item.link}>{item.title}</a> : <span>{item.title}</span>}
-              <span className="item-meta">{[when, host].filter(Boolean).join(" · ")}</span>
-            </li>
-          );
-        })}
-      </ol>
+      <ItemList
+        items={feed.items.map((item) => ({
+          id: item.id,
+          title: item.title,
+          link: item.link,
+          description: item.description,
+          when: item.published ? formatWhen(item.published) : `Seen ${formatWhen(item.seenAt)}`,
+        }))}
+      />
     </>
   );
 }

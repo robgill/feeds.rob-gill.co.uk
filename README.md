@@ -58,18 +58,36 @@ Glastonbury’s news index does not publish its own posts feed. `https://www.gla
 
 The dedupe hash is SHA-256 of the item’s guid when it has one, otherwise of its link. Items with neither are skipped. A run is one fetch of one feed. Counts are `fetched`, `inserted`, `duplicates` and `skipped`.
 
-Destination config stores the name of an environment variable, never a webhook URL or other secret, and the pages do not show config. The seeded names are `SLACK_FEEDS_WEBHOOK_URL` and `FEEDS_EMAIL_TO`. They are unused until delivery exists.
+Destination config stores the name of an environment variable, never a webhook URL or other secret, and the pages do not show config. The seeded Slack destination names `SLACK_FEEDS_WEBHOOK_URL`. Email names `FEEDS_EMAIL_TO` and is not sent yet.
+
+Sidebar posts with the mark `:sidebar:` and the via-line `sidebar.io`, the same message as `robgill/sidebar-to-slack`.
 
 ## Production
 
-Set `DATABASE_URL` to a Neon or Vercel Postgres connection string. The same `npm run db:setup` and `npm run fetch` commands use that database instead of PGlite. Prefer a direct, non-pooled URL for setup.
+On Vercel, set:
 
-`vercel.json` schedules `GET /api/cron` at `0 11 * * *`. Vercel cron is UTC, so that is 11:00 in London while the UK is on GMT and 12:00 while it is on BST. The stored schedule stays 11:00 Europe/London for when delivery follows the clock. The route refuses every request unless `Authorization` is `Bearer` plus `CRON_SECRET`.
+- `DATABASE_URL` or `POSTGRES_URL`: a Neon or Vercel Postgres connection string
+- `CRON_SECRET`: the bearer token Vercel Cron sends, and that you send for a manual run
+- `SLACK_FEEDS_WEBHOOK_URL`: the incoming webhook for `#feeds`
+
+After the first deploy, from this directory with that database URL in the environment:
 
 ```bash
-curl -i -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron
+npm run db:setup
 ```
 
-A missing or wrong token gets `401 Unauthorised`. Copy `.env.example` to `.env.local` for local values. Next.js reads that file for `npm run dev`. The scripts read `.env` and `.env.local` as well, and do not override variables already set in the shell.
+That applies the migrations and seed. It is safe to run again.
+
+`vercel.json` calls `GET /api/cron` daily at `0 11 * * *` UTC. The handler fetches feeds that are due (daily at 11:00 Europe/London, and not already run since that time) and posts new Slack items. The first post for a feed only includes items from the last 24 hours, or the single newest item if none are that recent. Later runs post only items that have not been marked sent. Email routes are skipped.
+
+Run it by hand:
+
+```bash
+curl -i -H "Authorization: Bearer $CRON_SECRET" "https://feeds.rob-gill.co.uk/api/cron?now=1"
+```
+
+`now=1` fetches every enabled feed, not only those that are due. Omit it to follow the schedule. A missing or wrong token gets `401 Unauthorised`.
+
+Copy `.env.example` to `.env.local` for local values. Next.js reads that file for `npm run dev`. The scripts read `.env` and `.env.local` as well, and do not override variables already set in the shell.
 
 The pages are marked `noindex`. There is still no login.

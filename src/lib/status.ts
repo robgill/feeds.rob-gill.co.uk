@@ -28,6 +28,7 @@ export type FeedItemView = {
   id: string;
   title: string;
   link: string | null;
+  description: string | null;
   published: Date | string | null;
   seenAt: Date | string;
 };
@@ -96,6 +97,7 @@ export async function getFeedDetail(id: string): Promise<FeedDetailStatus> {
         id: items.id,
         title: items.title,
         link: items.link,
+        description: items.description,
         published: items.published,
         seenAt: items.seenAt,
       })

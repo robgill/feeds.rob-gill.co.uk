@@ -5,7 +5,10 @@ export type ParsedItem = {
   link: string | null;
   guid: string | null;
   published: Date | null;
+  description: string | null;
 };
+
+const DESCRIPTION_LIMIT = 500;
 
 const parser = new XMLParser({
   ignoreAttributes: false,
@@ -49,6 +52,7 @@ function parseRssItem(item: Record<string, unknown>): ParsedItem {
     link: linkOf(item.link),
     guid: textOf(item.guid),
     published: dateOf(textOf(item.pubDate) ?? textOf(item.date)),
+    description: descriptionOf(item),
   };
 }
 
@@ -59,11 +63,24 @@ function parseAtom(document: Record<string, unknown>): ParsedItem[] {
     link: linkOf(entry.link),
     guid: textOf(entry.id),
     published: dateOf(textOf(entry.published) ?? textOf(entry.updated)),
+    description: descriptionOf(entry),
   }));
 }
 
 function titleOf(value: unknown): string {
   return plain(textOf(value) ?? "") || "(untitled)";
+}
+
+function descriptionOf(record: Record<string, unknown>): string | null {
+  const raw =
+    textOf(record.description) ??
+    textOf(record.summary) ??
+    textOf(record.encoded) ??
+    textOf(record.content);
+  const text = plain(raw ?? "");
+  if (!text) return null;
+  if (text.length <= DESCRIPTION_LIMIT) return text;
+  return `${text.slice(0, DESCRIPTION_LIMIT - 1).trimEnd()}…`;
 }
 
 function plain(value: string): string {
