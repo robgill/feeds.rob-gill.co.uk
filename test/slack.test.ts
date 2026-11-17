@@ -34,7 +34,7 @@ test("the first Slack run does not post the whole backlog", () => {
   );
   assert.deepEqual(
     itemsToPost([item("old", "2026-11-01T11:00:00.000Z")], true, now).map((row) => row.title),
-    ["old"],
+    [],
   );
   assert.equal(itemsToPost(rows, false, now).length, 3);
 });
