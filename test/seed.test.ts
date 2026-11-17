@@ -14,10 +14,15 @@ test("seed keeps secrets out of destination config", () => {
   assert.doesNotMatch(blob, /https?:\/\//);
   assert.deepEqual(
     SEEDED_FEEDS.map((feed) => feed.url),
-    ["https://sidebar.io/feed.xml", "https://www.glastonburyfestivals.co.uk/feed/"],
+    [
+      "https://sidebar.io/feed.xml",
+      "https://www.glastonburyfestivals.co.uk/feed/",
+      "https://api.substack.com/feed/podcast/10845.rss",
+      "https://api.substack.com/feed/podcast/10845/s/198869.rss",
+    ],
   );
   assert.deepEqual(
     SEEDED_FEEDS.map((feed) => feed.destinationName),
-    ["#feeds", "Personal email"],
+    ["#feeds", "Personal email", "#feeds", "#feeds"],
   );
 });
