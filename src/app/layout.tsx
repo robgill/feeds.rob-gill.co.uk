@@ -1,12 +1,17 @@
 import type { Metadata, Viewport } from "next";
 import { HeadMark } from "@/components/head-mark";
 import { ThemeCaret } from "@/components/theme-caret";
+import { brandFrom } from "@/lib/brand";
+import { PLAIN_THEME_BOOT } from "@/lib/plain-theme";
 import "./globals.css";
+import "./plain.css";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+const brand = brandFrom(process.env.NEXT_PUBLIC_BRAND);
+
+const robGillMetadata: Metadata = {
   title: {
     default: "Feeds",
     template: "%s · Feeds",
@@ -51,28 +56,69 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
+const plainMetadata: Metadata = {
+  title: {
+    default: "Feeds",
+    template: "%s · Feeds",
+  },
+  description:
+    "A personal RSS router. New posts go to Slack on a schedule. This page shows status and does not show webhook URLs or email addresses.",
+  robots: { index: false, follow: false },
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
+  openGraph: {
+    siteName: "Feeds",
+    title: "Feeds",
+    description: "A personal RSS router. New posts go to Slack on a schedule.",
+    type: "website",
+    locale: "en_GB",
+  },
+};
+
+export const metadata: Metadata = brand === "robgill" ? robGillMetadata : plainMetadata;
+
+const robGillViewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
 };
 
+const plainViewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f6f3" },
+    { media: "(prefers-color-scheme: dark)", color: "#141413" },
+  ],
+};
+
+export const viewport: Viewport = brand === "robgill" ? robGillViewport : plainViewport;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const robGill = brand === "robgill";
   return (
-    <html lang="en-GB" suppressHydrationWarning>
+    <html lang="en-GB" {...(robGill ? {} : { "data-brand": "plain" })} suppressHydrationWarning>
       <head>
-        {/* Blocking on purpose: brand.js sets data-theme before the stylesheet paints. */}
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script src="https://rob-gill.co.uk/brand.js" />
-        <link rel="stylesheet" href="https://rob-gill.co.uk/brand.css" />
+        {robGill ? (
+          <>
+            {/* Blocking on purpose: brand.js sets data-theme before the stylesheet paints. */}
+            {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+            <script src="https://rob-gill.co.uk/brand.js" />
+            <link rel="stylesheet" href="https://rob-gill.co.uk/brand.css" />
+          </>
+        ) : (
+          <>
+            {/* Blocking on purpose: sets data-theme before the stylesheet paints. */}
+            <script dangerouslySetInnerHTML={{ __html: PLAIN_THEME_BOOT }} />
+          </>
+        )}
       </head>
       <body>
         <div className="page">
-          <HeadMark />
+          {robGill ? <HeadMark /> : null}
           <h1 className="name">
             Feeds
-            <ThemeCaret />
+            <ThemeCaret brand={brand} />
           </h1>
           <div className="col">{children}</div>
         </div>

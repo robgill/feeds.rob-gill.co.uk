@@ -2,7 +2,8 @@
   "name": "feeds.rob-gill.co.uk",
   "version": "0.1.0",
   "private": true,
-  "description": "Personal RSS router for feeds.rob-gill.co.uk",
+  "license": "MIT",
+  "description": "Personal RSS router that posts to Slack on a schedule",
   "homepage": "https://feeds.rob-gill.co.uk",
   "repository": {
     "type": "git",

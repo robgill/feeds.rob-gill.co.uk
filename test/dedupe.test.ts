@@ -50,7 +50,7 @@ before(async () => {
   await migrateDatabase(db, "pglite");
   const [user] = await db
     .insert(users)
-    .values({ name: "Rob Gill", email: "rob@provius.co.uk" })
+    .values({ name: "Test Owner", email: "owner@example.com" })
     .returning();
   await db.insert(feeds).values([
     {
