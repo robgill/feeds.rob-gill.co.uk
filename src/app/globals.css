@@ -124,14 +124,18 @@ a.link.ext:focus-visible {
   line-height: var(--lh-small);
 }
 
+.list > .item + .item {
+  margin-top: calc(var(--unit) * 1.5);
+  border-top: var(--rule-weight, 1px) solid var(--rule-colour, var(--grey-5));
+}
+
 .list-row {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: baseline;
   column-gap: calc(var(--unit) * 3);
   width: 100%;
-  padding: calc(var(--unit) * 1.5) 0 calc(var(--unit) * 1.5 - var(--rule-weight, 1px));
-  border-bottom: var(--rule-weight, 1px) solid var(--rule-colour, var(--grey-5));
+  padding: calc(var(--unit) * 1.5) 0 0;
   color: var(--grey-1);
   text-align: left;
 }
@@ -143,8 +147,11 @@ a.link.ext:focus-visible {
   letter-spacing: var(--caps-tracking);
 }
 
-.words-foot {
-  margin-top: calc(var(--unit) * 2);
+.list .words-foot {
+  margin-top: 0;
+  padding-top: 0;
+  font-size: var(--fs-small);
+  line-height: var(--lh-small, var(--lh));
 }
 
 .recent > summary.more {
