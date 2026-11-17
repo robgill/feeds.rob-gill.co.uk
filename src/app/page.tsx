@@ -1,24 +1,34 @@
 import Link from "next/link";
+import { ItemList } from "@/components/item-list";
 import { MetaList } from "@/components/meta-list";
 import { SetupMessage } from "@/components/setup-message";
 import { formatWhen, statusLabel } from "@/lib/format";
-import { getHomeStatus, type HomeFeed } from "@/lib/status";
+import { getFeedDetail, getHomeStatus, type FeedItemView, type HomeFeed } from "@/lib/status";
 
 export default async function HomePage() {
   const status = await getHomeStatus();
   if (!status.ready) return <SetupMessage />;
 
+  const blocks: { feed: HomeFeed; items: FeedItemView[] }[] = [];
+  for (const feed of status.feeds) {
+    const detail = await getFeedDetail(feed.id);
+    blocks.push({
+      feed,
+      items: detail.ready && detail.feed ? detail.feed.items : [],
+    });
+  }
+
   return (
     <>
-      {status.feeds.length === 0 ? <p>No feeds yet.</p> : null}
-      {status.feeds.map((feed) => (
-        <FeedBlock key={feed.id} feed={feed} />
+      {blocks.length === 0 ? <p>No feeds yet.</p> : null}
+      {blocks.map(({ feed, items }) => (
+        <FeedBlock key={feed.id} feed={feed} items={items} />
       ))}
     </>
   );
 }
 
-function FeedBlock({ feed }: { feed: HomeFeed }) {
+function FeedBlock({ feed, items }: { feed: HomeFeed; items: FeedItemView[] }) {
   const lastRun = feed.lastRun;
   return (
     <section className="feed">
@@ -50,9 +60,10 @@ function FeedBlock({ feed }: { feed: HomeFeed }) {
           { term: "New items", detail: lastRun ? String(lastRun.inserted) : "Not yet" },
         ]}
       />
-      <Link className="more" href={`/feeds/${feed.id}`}>
-        Recent items
-      </Link>
+      <details className="recent">
+        <summary className="more">Recent items</summary>
+        <ItemList items={items} />
+      </details>
     </section>
   );
 }

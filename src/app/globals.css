@@ -95,9 +95,20 @@ h2 {
   color: var(--grey-1);
 }
 
-.link {
+/* Resting links are --grey-2; hover is --text (black in light, white in dark). */
+a.link.ext {
   color: var(--grey-2);
-  text-decoration: none;
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+  overflow-wrap: anywhere;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--rule-weight);
+  text-underline-offset: 0.15em;
+}
+
+a.link.ext:hover,
+a.link.ext:focus-visible {
+  color: var(--text);
 }
 
 .intro {
@@ -105,6 +116,12 @@ h2 {
   color: var(--grey-2);
   text-wrap: pretty;
   max-width: 36ch;
+}
+
+.list .intro {
+  max-width: none;
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
 }
 
 .list-row {
@@ -126,39 +143,28 @@ h2 {
   letter-spacing: var(--caps-tracking);
 }
 
-.list-extra {
-  display: grid;
-  grid-template-rows: 0fr;
-  overflow: hidden;
-  transition: grid-template-rows var(--dur-rise, 0.64s) cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.list-extra > .list {
-  min-height: 0;
-  overflow: hidden;
-}
-
-.list-extra:not(.is-expanded) > .list {
-  display: none;
-}
-
-.list-extra.is-expanded {
-  grid-template-rows: 1fr;
-  overflow: visible;
-}
-
-.list-extra.is-expanded > .list {
-  display: block;
-}
-
 .words-foot {
   margin-top: calc(var(--unit) * 2);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .list-extra {
-    transition: none;
-  }
+.recent > summary.more {
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  list-style: none;
+}
+
+.recent > summary.more::-webkit-details-marker {
+  display: none;
+}
+
+.recent > summary.more::marker {
+  content: none;
+}
+
+.recent > .list,
+.recent > .intro {
+  margin-top: calc(var(--unit) * 2);
 }
 
 .feed {
