@@ -17,7 +17,7 @@ export function ItemList({ items }: { items: ItemListEntry[] }) {
       {items.map((item) => {
         const when = item.published ? formatWhen(item.published) : `Seen ${formatWhen(item.seenAt)}`;
         return (
-          <div key={item.id}>
+          <div className="item" key={item.id}>
             <div className="list-row">
               <span className="t">
                 <span className="hl">{item.title}</span>
