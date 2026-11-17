@@ -19,10 +19,11 @@ test("seed keeps secrets out of destination config", () => {
       "https://www.glastonburyfestivals.co.uk/feed/",
       "https://api.substack.com/feed/podcast/10845.rss",
       "https://api.substack.com/feed/podcast/10845/s/198869.rss",
+      "https://feeds.simplecast.com/eew_vyNL",
     ],
   );
   assert.deepEqual(
     SEEDED_FEEDS.map((feed) => feed.destinationName),
-    ["#feeds", "Personal email", "#feeds", "#feeds"],
+    ["#feeds", "Personal email", "#feeds", "#feeds", "#feeds"],
   );
 });
