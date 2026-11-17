@@ -31,7 +31,7 @@ export default async function FeedPage({ params }: PageProps) {
       <Link className="back" href="/">
         All feeds
       </Link>
-      <h1>{feed.name}</h1>
+      <h2 className="feed-title">{feed.name}</h2>
       <p className="quiet">
         <a href={feed.url}>{feed.url}</a>
       </p>

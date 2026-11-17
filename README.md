@@ -32,7 +32,7 @@ npm run build
 
 ## Theme
 
-The root layout loads `https://rob-gill.co.uk/brand.js` (before the stylesheet, with no `async` or `defer`) and `https://rob-gill.co.uk/brand.css`. `brand.js` sets `data-theme` on `<html>` from the `robgill:theme` key in `localStorage`: `light`, `dark` or `yellow`. The theme control on the page saves a choice. `?theme=dark` previews a theme without saving it.
+The root layout loads `https://rob-gill.co.uk/brand.js` (before the stylesheet, with no `async` or `defer`) and `https://rob-gill.co.uk/brand.css`. `brand.js` sets `data-theme` on `<html>` from the `robgill:theme` key in `localStorage`: `light`, `dark` or `yellow`. The masthead is the same 110-cell head as [rob-gill.co.uk](https://rob-gill.co.uk), drawn at rest at 220px, and it links there. The word “feeds” is followed by the homepage caret: a 1.1s step blink, still when reduced motion is on. Clicking it cycles the theme through `window.robgillSetTheme` and saves the choice. `?theme=dark` previews a theme without saving it.
 
 Colours and type come from the brand tokens (`--bg`, `--text`, `--grey-1` to `--grey-5`, `--accent`, `--font`, `--fs-body`, `--fs-small`, `--fs-title`, `--lh`, `--unit`).
 

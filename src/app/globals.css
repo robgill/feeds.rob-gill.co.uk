@@ -3,7 +3,66 @@
   padding: calc(var(--unit) * 4) calc(var(--unit) * 3) calc(var(--unit) * 8);
 }
 
-.mast-row,
+.mast {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.head-link {
+  display: block;
+  width: min(220px, 100%);
+  line-height: 0;
+}
+
+.head-link:hover {
+  background: none;
+}
+
+.head-mark {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.name {
+  display: inline-flex;
+  align-items: baseline;
+  margin-top: calc(var(--unit) * 3);
+  color: var(--text);
+  font-size: var(--fs-body);
+  font-weight: var(--w-bold);
+  line-height: var(--lh);
+  letter-spacing: var(--caps-tracking);
+}
+
+.caret {
+  display: inline-block;
+  align-self: center;
+  width: 0.6em;
+  height: 1.05em;
+  margin-left: 0.3em;
+  padding: 0;
+  border-radius: 1px;
+  background: var(--text);
+  animation: blink 1.1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+}
+
 .feed-head {
   display: flex;
   justify-content: space-between;
@@ -11,17 +70,15 @@
   gap: calc(var(--unit) * 2);
 }
 
-.kicker,
 .feed-head p,
-.item-meta,
-.note,
-.themes {
+.item-meta {
   color: var(--grey-3);
   font-size: var(--fs-small);
 }
 
-h1 {
-  margin-top: calc(var(--unit) * 3);
+.feed-title {
+  margin-top: calc(var(--unit) * 2);
+  color: var(--text);
   font-size: var(--fs-title);
   font-weight: var(--w-bold);
 }
@@ -30,28 +87,6 @@ h2 {
   font-size: var(--fs-body);
   font-weight: var(--w-bold);
   color: var(--grey-1);
-}
-
-.lede {
-  max-width: 62ch;
-  margin-top: var(--unit);
-  color: var(--grey-2);
-}
-
-.themes {
-  display: flex;
-  gap: calc(var(--unit) * 1.5);
-}
-
-.themes button {
-  color: var(--grey-3);
-}
-
-html[data-theme="light"] [data-theme-choice="light"],
-html[data-theme="dark"] [data-theme-choice="dark"],
-html[data-theme="yellow"] [data-theme-choice="yellow"] {
-  color: var(--text);
-  box-shadow: inset 0 calc(var(--unit) / -4) 0 var(--accent);
 }
 
 a:hover {
@@ -115,10 +150,6 @@ a:hover {
   color: var(--grey-4);
 }
 
-.note {
-  margin-top: calc(var(--unit) * 6);
-}
-
 .run-error {
   display: block;
   color: var(--grey-2);
@@ -132,7 +163,6 @@ code {
 }
 
 @media (max-width: 799px) {
-  .mast-row,
   .feed-head {
     flex-direction: column;
     align-items: flex-start;

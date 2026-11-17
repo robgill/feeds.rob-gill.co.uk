@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { HeadMark } from "@/components/head-mark";
+import { ThemeCaret } from "@/components/theme-caret";
 import "./globals.css";
 
 export const runtime = "nodejs";
@@ -27,12 +27,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <div className="wrap">
           <header className="mast">
-            <div className="mast-row">
-              <p className="kicker">
-                <Link href="/">feeds.rob-gill.co.uk</Link>
-              </p>
-              <ThemeSwitch />
-            </div>
+            <HeadMark />
+            <h1 className="name">
+              feeds
+              <ThemeCaret />
+            </h1>
           </header>
           {children}
         </div>

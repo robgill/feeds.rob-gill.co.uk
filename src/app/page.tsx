@@ -10,13 +10,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <h1>Feeds</h1>
-      <p className="lede">Where each feed goes, and what the last fetch did.</p>
-      {status.feeds.length === 0 ? <p className="lede">No feeds yet.</p> : null}
+      {status.feeds.length === 0 ? <p>No feeds yet.</p> : null}
       {status.feeds.map((feed) => (
         <FeedBlock key={feed.id} feed={feed} />
       ))}
-      <p className="note">Nothing is sent from here yet.</p>
     </>
   );
 }
