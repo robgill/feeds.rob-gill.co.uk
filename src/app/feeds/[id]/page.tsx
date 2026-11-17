@@ -57,15 +57,7 @@ export default async function FeedPage({ params }: PageProps) {
           { term: "New items", detail: lastRun ? String(lastRun.inserted) : "Not yet" },
         ]}
       />
-      <ItemList
-        items={feed.items.map((item) => ({
-          id: item.id,
-          title: item.title,
-          link: item.link,
-          description: item.description,
-          when: item.published ? formatWhen(item.published) : `Seen ${formatWhen(item.seenAt)}`,
-        }))}
-      />
+      <ItemList items={feed.items} />
     </>
   );
 }

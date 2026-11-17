@@ -1,52 +1,37 @@
-"use client";
+import { formatWhen } from "@/lib/format";
 
-import { useState } from "react";
-
-export type ExpandableItem = {
+export type ItemListEntry = {
   id: string;
   title: string;
   link: string | null;
   description: string | null;
-  when: string;
+  published: Date | string | null;
+  seenAt: Date | string;
 };
 
-/** In-place disclosure, same classes as the homepage list expand. */
-export function ItemList({ items }: { items: ExpandableItem[] }) {
-  const [openId, setOpenId] = useState<string | null>(null);
-
+export function ItemList({ items }: { items: ItemListEntry[] }) {
   if (items.length === 0) return <p className="intro">No items yet.</p>;
 
   return (
     <div className="list">
       {items.map((item) => {
-        const panelId = `item-${item.id}`;
-        const open = openId === item.id;
+        const when = item.published ? formatWhen(item.published) : `Seen ${formatWhen(item.seenAt)}`;
         return (
           <div key={item.id}>
-            <button
-              type="button"
-              className="list-row"
-              aria-expanded={open}
-              aria-controls={panelId}
-              onClick={() => setOpenId(open ? null : item.id)}
-            >
+            <div className="list-row">
               <span className="t">
                 <span className="hl">{item.title}</span>
               </span>
-              <span className="y">{item.when}</span>
-            </button>
-            <div className={open ? "list-extra is-expanded" : "list-extra"} id={panelId} inert={open ? undefined : true}>
-              <div className="list">
-                <p className="intro">{item.description || "No description."}</p>
-                {item.link ? (
-                  <p className="words-foot">
-                    <a className="link ext" href={item.link}>
-                      {item.link}
-                    </a>
-                  </p>
-                ) : null}
-              </div>
+              <span className="y">{when}</span>
             </div>
+            <p className="intro">{item.description || "No description."}</p>
+            {item.link ? (
+              <p className="words-foot">
+                <a className="link ext" href={item.link}>
+                  {item.link}
+                </a>
+              </p>
+            ) : null}
           </div>
         );
       })}
